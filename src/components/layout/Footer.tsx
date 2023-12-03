@@ -6,14 +6,24 @@ import { Typography } from "@/components/ui/typography";
 export const Footer = () => {
   return (
     <footer className="w-full border-t border-card">
-      <div className="m-auto w-full max-w-3xl px-2 py-4">
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
-          <Image
-            src="/images/logo-text.png"
-            width={100}
-            height={50}
-            alt="app logo"
-          />
+      <div className="m-auto w-full max-w-3xl space-y-4 px-2 py-4">
+        <div className="flex flex-col max-md:space-y-2 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-2 max-md:self-center">
+            <Image
+              src={SiteConfig.logo}
+              width={50}
+              height={35}
+              alt="app logo"
+            />
+            <Typography
+              variant="base"
+              as={Link}
+              href="/"
+              className="text-muted-foreground"
+            >
+              {SiteConfig.title}
+            </Typography>
+          </div>
           <div className="flex flex-col items-end gap-2 text-sm text-muted-foreground md:flex-row ">
             <Link className="hover:underline" href="/legal/privacy">
               Privacy
