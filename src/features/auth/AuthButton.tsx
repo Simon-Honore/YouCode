@@ -1,11 +1,10 @@
 import React from "react";
 import LoginButton from "./LoginButton";
 import LoggedInButton from "./LoggedInButton";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../pages/api/auth/[...nextauth]";
+import { getAuthSession } from "@/lib/auth";
 
 export default async function AuthButton() {
-  const session = await getServerSession(authOptions);
+  const session = await getAuthSession();
 
   if (!session) {
     return <LoginButton />;
