@@ -14,7 +14,7 @@ import Link from "next/link";
 import { Settings, UserCog } from "lucide-react";
 import LogoutButton from "@/features/auth/LogoutButton";
 
-export default async function Account() {
+export default async function AccountPage() {
   const session = await getAuthSession();
 
   if (!session) {
