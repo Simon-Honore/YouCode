@@ -64,7 +64,7 @@ export default async function CoursesPage() {
                       <Typography
                         as={Link}
                         variant="large"
-                        href={`/courses/${course.id}`}
+                        href={`/admin/courses/${course.id}`}
                       >
                         {course.name}
                       </Typography>
