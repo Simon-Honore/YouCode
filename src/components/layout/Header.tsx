@@ -4,6 +4,7 @@ import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Typography } from "@/components/ui/typography";
 import Image from "next/image";
 import AuthButton from "@/features/auth/AuthButton";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 export function Header() {
   return (
@@ -17,6 +18,9 @@ export function Header() {
         </div>
 
         <div className="flex flex-1 items-center justify-end space-x-4">
+          <Typography as={Link} href="/courses" variant="link">
+            Les cours
+          </Typography>
           <nav className="flex items-center space-x-1">
             <AuthButton />
             <ThemeToggle />
