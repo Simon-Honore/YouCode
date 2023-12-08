@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 export type CoursePaginationButtonProps = {
@@ -23,6 +24,7 @@ export const CoursePaginationButton = (props: CoursePaginationButtonProps) => {
           const url = `${props.baseUrl}?${searchParams.toString()}`;
           router.push(url);
         }}
+        disabled={props.page < 1}
       >
         Previous
       </Button>
@@ -36,6 +38,7 @@ export const CoursePaginationButton = (props: CoursePaginationButtonProps) => {
           const url = `${props.baseUrl}?${searchParams.toString()}`;
           router.push(url);
         }}
+        disabled={props.page > props.totalPage}
       >
         Next
       </Button>
