@@ -14,6 +14,7 @@ export default function LoginButton({ ...props }: ButtonProps) {
 
   return (
     <Button
+      variant="outline"
       onClick={() => {
         loginMutation.mutate();
       }}

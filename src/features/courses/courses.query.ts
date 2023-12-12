@@ -15,11 +15,16 @@ export const getCourses = async ({
   return await prisma.course.findMany({
     where: userId
       ? {
-          users: {
-            some: {
-              id: userId,
+          OR: [
+            { creatorId: userId },
+            {
+              users: {
+                some: {
+                  id: userId,
+                },
+              },
             },
-          },
+          ],
         }
       : undefined,
     select: {
