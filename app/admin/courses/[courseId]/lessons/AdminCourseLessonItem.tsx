@@ -3,11 +3,13 @@ import { Typography } from "@/components/ui/typography";
 import { Lesson } from "@prisma/client";
 import React from "react";
 
-export type CourseLessonItemProps = {
+export type AdminCourseLessonItemProps = {
   lesson: Partial<Lesson>;
 };
 
-export default function CourseLessonItem({ lesson }: CourseLessonItemProps) {
+export default function AdminCourseLessonItem({
+  lesson,
+}: AdminCourseLessonItemProps) {
   return (
     <div className="p-1">
       <div className="flex items-center justify-between rounded p-2 hover:bg-accent">
