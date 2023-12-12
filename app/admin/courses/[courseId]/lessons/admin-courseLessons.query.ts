@@ -1,14 +1,14 @@
 import { prisma } from "@/lib/prisma";
 
-export type GetCourseLessonsProps = {
+export type GetAdminCourseLessonsProps = {
   userId: string;
   courseId: string;
 };
 
-export const getCourseLessons = async ({
+export const getAdminCourseLessons = async ({
   userId,
   courseId,
-}: GetCourseLessonsProps) => {
+}: GetAdminCourseLessonsProps) => {
   const courseLessons = await prisma.lesson.findMany({
     where: {
       courseId,

@@ -1,6 +1,6 @@
 import { getRequiredAuthSession } from "@/lib/auth";
 import React from "react";
-import { getCourseLessons } from "./courseLessons.query";
+import { getAdminCourseLessons } from "./admin-courseLessons.query";
 import {
   Layout,
   LayoutContent,
@@ -9,7 +9,7 @@ import {
 } from "@/components/layout/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { notFound } from "next/navigation";
-import CourseLessonItem from "./CourseLessonItem";
+import AdminCourseLessonItem from "./AdminCourseLessonItem";
 
 export default async function CoursesLessonsPage({
   params,
@@ -18,7 +18,7 @@ export default async function CoursesLessonsPage({
 }) {
   const { user } = await getRequiredAuthSession();
 
-  const lessons = await getCourseLessons({
+  const lessons = await getAdminCourseLessons({
     courseId: params.courseId,
     userId: user.id,
   });
@@ -37,7 +37,7 @@ export default async function CoursesLessonsPage({
         <Card>
           <CardContent className="flex flex-col divide-y-2 px-8 py-4">
             {lessons.map((lesson) => (
-              <CourseLessonItem key={lesson.id} lesson={lesson} />
+              <AdminCourseLessonItem key={lesson.id} lesson={lesson} />
             ))}
           </CardContent>
         </Card>
