@@ -44,7 +44,7 @@ export default async function AccountPage() {
       <CardContent className="flex flex-col gap-4">
         <Link
           className={buttonVariants({ variant: "outline", size: "lg" })}
-          href="/settings"
+          href="/account/settings"
         >
           <Settings className="mr-2 h-4 w-4" />
           Paramètres
