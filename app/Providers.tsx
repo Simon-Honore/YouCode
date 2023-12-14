@@ -4,7 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { PropsWithChildren } from "react";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
 
