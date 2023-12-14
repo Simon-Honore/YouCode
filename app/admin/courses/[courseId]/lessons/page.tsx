@@ -10,6 +10,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { notFound } from "next/navigation";
 import AdminCourseLessonItem from "./AdminCourseLessonItem";
+import Link from "next/link";
 
 export default async function CoursesLessonsPage({
   params,
@@ -37,7 +38,12 @@ export default async function CoursesLessonsPage({
         <Card>
           <CardContent className="flex flex-col divide-y-2 px-8 py-4">
             {lessons.map((lesson) => (
-              <AdminCourseLessonItem key={lesson.id} lesson={lesson} />
+              <Link
+                href={`/admin/courses/${params.courseId}/lessons/${lesson.id}/edit`}
+                key={lesson.id}
+              >
+                <AdminCourseLessonItem lesson={lesson} />
+              </Link>
             ))}
           </CardContent>
         </Card>

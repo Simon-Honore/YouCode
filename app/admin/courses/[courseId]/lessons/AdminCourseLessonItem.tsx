@@ -14,7 +14,7 @@ export default function AdminCourseLessonItem({
     <div className="p-1">
       <div className="flex items-center justify-between rounded p-2 hover:bg-accent">
         <Typography variant="large">{lesson.name}</Typography>
-        <Badge variant="secondary">{lesson.state}</Badge>
+        <Badge>{lesson.state}</Badge>
       </div>
     </div>
   );
