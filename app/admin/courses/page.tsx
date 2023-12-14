@@ -1,10 +1,12 @@
 import {
   Layout,
+  LayoutActions,
   LayoutContent,
   LayoutHeader,
   LayoutTitle,
 } from "@/components/layout/Layout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -34,6 +36,14 @@ export default async function CoursesPage() {
       <LayoutHeader>
         <LayoutTitle>Cours</LayoutTitle>
       </LayoutHeader>
+      <LayoutActions>
+        <Link
+          href={`/admin/courses/create`}
+          className={buttonVariants({ variant: "secondary" })}
+        >
+          Créer un cours
+        </Link>
+      </LayoutActions>
       <LayoutContent>
         <Card className="py-4">
           <CardContent>

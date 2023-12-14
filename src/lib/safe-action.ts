@@ -16,12 +16,12 @@ export const authentificatedAction = createSafeActionClient({
   async middleware() {
     const session = await getAuthSession();
 
-    if (!session) {
+    const user = session?.user;
+    const userId = user?.id;
+
+    if (!userId) {
       throw new ServerError("You must be logged in to perform this action");
     }
-
-    const user = session.user;
-    const userId = user.id;
 
     return {
       user,

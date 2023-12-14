@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { courseActionEdit } from "./course.action";
+import { courseActionCreate, courseActionEdit } from "./course.action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -40,25 +40,25 @@ export default function CourseForm({ defaultValues }: CourseFormProps) {
       onSubmit={async (values) => {
         console.log(values);
 
-        if (defaultValues?.id) {
-          const { data, serverError } = await courseActionEdit({
-            courseId: defaultValues?.id,
-            data: values,
-          });
+        const { data, serverError } = defaultValues?.id
+          ? await courseActionEdit({
+              courseId: defaultValues?.id,
+              data: values,
+            })
+          : await courseActionCreate(values);
 
-          if (data) {
-            toast.success("Le cours a été modifié.");
-            router.push(`/admin/courses/${defaultValues.id}`);
-            router.refresh();
-            return;
-          }
-
-          toast.error("Une erreur est survenue.", {
-            description: serverError,
-          });
-        } else {
-          // create
+        if (data) {
+          toast.success(
+            `Le cours a été ${defaultValues?.id ? "modifié." : "créé."}`
+          );
+          router.push(`/admin/courses/${data.course.id}`);
+          router.refresh();
+          return;
         }
+
+        toast.error("Une erreur est survenue.", {
+          description: serverError,
+        });
       }}
     >
       <FormField

@@ -19,7 +19,13 @@ export default function AdminPage() {
           className={buttonVariants({ variant: "outline", size: "lg" })}
           href="/admin/courses"
         >
-          Courses
+          Mes cours
+        </Link>
+        <Link
+          className={buttonVariants({ variant: "outline", size: "lg" })}
+          href="/admin/courses/create"
+        >
+          Créer un cours
         </Link>
       </LayoutContent>
     </Layout>

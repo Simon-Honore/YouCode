@@ -1,7 +1,7 @@
 import React from "react";
 import { CoursesCard } from "./courses.query";
 import Link from "next/link";
-import { Card, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Typography } from "@/components/ui/typography";
 
@@ -12,18 +12,17 @@ export type CoursesCardProps = {
 export default function CoursesCard({ course }: CoursesCardProps) {
   return (
     <Link href={`/courses/${course.id}`}>
-      <Card className="h-full hover:bg-accent">
-        <CardHeader className="flex flex-row gap-4 space-y-0 p-4">
-          <Avatar className="my-6 h-20 w-20 rounded">
+      <Card className="flex h-full items-center p-4 hover:bg-accent">
+        <CardContent className="flex flex-row items-center gap-4 p-0">
+          <Avatar className=" h-20 w-20 rounded">
             <AvatarFallback>{course.name[0]}</AvatarFallback>
             {course.image && (
               <AvatarImage src={course.image} alt={course.name} />
             )}
           </Avatar>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex h-fit flex-col gap-3">
             <Typography variant="h3">{course.name}</Typography>
-            <Typography variant="small">{course.presentation}</Typography>
 
             <div className="inline-flex items-center gap-2">
               <Avatar className="h-8 w-8">
@@ -40,7 +39,7 @@ export default function CoursesCard({ course }: CoursesCardProps) {
               </Typography>
             </div>
           </div>
-        </CardHeader>
+        </CardContent>
       </Card>
     </Link>
   );
