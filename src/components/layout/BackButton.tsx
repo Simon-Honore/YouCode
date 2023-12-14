@@ -10,13 +10,13 @@ export default function BackButton() {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       onClick={() => {
         router.back();
       }}
+      size="icon"
     >
-      <ArrowLeft className="mr-2 h-6 w-6" />
-      Back
+      <ArrowLeft className="h-6 w-6 stroke-muted-foreground" />
     </Button>
   );
 }
