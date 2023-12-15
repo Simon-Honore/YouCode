@@ -14,6 +14,7 @@ import Link from "next/link";
 import SubmitButton from "@/components/form/SubmitButton";
 import { prisma } from "@/lib/prisma";
 import { Plus } from "lucide-react";
+import AdminCourseLessonSortable from "./AdminCourseLessonSortable";
 
 export default async function CoursesLessonsPage({
   params,
@@ -50,14 +51,7 @@ export default async function CoursesLessonsPage({
       <LayoutContent>
         <Card>
           <CardContent className="flex flex-col divide-y-2 px-8 py-4">
-            {lessons.map((lesson) => (
-              <Link
-                href={`/admin/courses/${params.courseId}/lessons/${lesson.id}/edit`}
-                key={lesson.id}
-              >
-                <AdminCourseLessonItem lesson={lesson} />
-              </Link>
-            ))}
+            <AdminCourseLessonSortable lessons={lessons} />
             <form>
               <SubmitButton
                 className="my-2 w-full"

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export type GetAdminCourseLessonsProps = {
   userId: string;
@@ -20,6 +21,7 @@ export const getAdminCourseLessons = async ({
       id: true,
       name: true,
       state: true,
+      rank: true,
       course: {
         select: {
           name: true,
@@ -30,3 +32,7 @@ export const getAdminCourseLessons = async ({
 
   return courseLessons;
 };
+
+export type GetAdminCourseLessons = Prisma.PromiseReturnType<
+  typeof getAdminCourseLessons
+>;
