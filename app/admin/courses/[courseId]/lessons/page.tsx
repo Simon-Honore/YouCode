@@ -9,8 +9,6 @@ import {
 } from "@/components/layout/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { notFound, redirect } from "next/navigation";
-import AdminCourseLessonItem from "./AdminCourseLessonItem";
-import Link from "next/link";
 import SubmitButton from "@/components/form/SubmitButton";
 import { prisma } from "@/lib/prisma";
 import { Plus } from "lucide-react";
@@ -23,35 +21,27 @@ export default async function CoursesLessonsPage({
 }) {
   const { user } = await getRequiredAuthSession();
 
-  const course = await prisma.course.findUnique({
-    where: {
-      id: params.courseId,
-      creatorId: user.id,
-    },
-    select: {
-      name: true,
-    },
-  });
-
-  const lessons = await getAdminCourseLessons({
+  const course = await getAdminCourseLessons({
     courseId: params.courseId,
     userId: user.id,
   });
 
-  if (!lessons) {
+  if (!course) {
     notFound();
   }
 
   return (
     <Layout>
       <LayoutHeader>
-        <LayoutTitle>Leçons du cours : {course?.name}</LayoutTitle>
+        <LayoutTitle>Leçons du cours : {course.name}</LayoutTitle>
       </LayoutHeader>
 
       <LayoutContent>
         <Card>
-          <CardContent className="flex flex-col divide-y-2 px-8 py-4">
-            <AdminCourseLessonSortable lessons={lessons} />
+          <CardContent className="flex flex-col gap-2 px-8 py-4">
+            <div className="flex flex-col divide-y-2">
+              <AdminCourseLessonSortable lessons={course.lessons} />
+            </div>
             <form>
               <SubmitButton
                 className="my-2 w-full"

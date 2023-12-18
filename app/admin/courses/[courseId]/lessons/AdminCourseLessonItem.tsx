@@ -1,30 +1,22 @@
 import { Badge } from "@/components/ui/badge";
 import { Typography } from "@/components/ui/typography";
-import { Lesson } from "@prisma/client";
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GetAdminCourseLessons } from "./admin-courseLessons.query";
+import { AdminLessonItemtype } from "./admin-courseLessons.query";
+import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Loader from "@/components/ui/loader";
 
 export type AdminCourseLessonItemProps = {
-  lesson: GetAdminCourseLessons[number];
+  lesson: AdminLessonItemtype;
+  isPending: boolean;
 };
-
-// export default function AdminCourseLessonItem({
-//   lesson,
-// }: AdminCourseLessonItemProps) {
-//   return (
-//     <div className="p-1">
-//       <div className="flex items-center justify-between rounded p-2 hover:bg-accent">
-//         <Typography variant="large">{lesson.name}</Typography>
-//         <Badge>{lesson.state}</Badge>
-//       </div>
-//     </div>
-//   );
-// }
 
 export default function AdminCourseLessonItem({
   lesson,
+  isPending,
 }: AdminCourseLessonItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: lesson.id });
@@ -35,12 +27,37 @@ export default function AdminCourseLessonItem({
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div>
       <div className="p-1">
-        <div className="flex items-center justify-between rounded p-2 hover:bg-accent">
-          <Typography variant="large">{lesson.name}</Typography>
-          <Badge>{lesson.state}</Badge>
-        </div>
+        <Link href={`/admin/courses/${lesson.courseId}/lessons/${lesson.id}`}>
+          <div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            className="flex items-center gap-2 rounded p-2 hover:bg-accent"
+          >
+            <Typography variant="large" className="flex-1">
+              {lesson.name}
+            </Typography>
+            <Badge>{lesson.state}</Badge>
+            <div
+              onClickCapture={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              <Button
+                variant="secondary"
+                size="icon"
+                className="cursor-move"
+                disabled={isPending}
+                {...listeners}
+              >
+                {isPending ? <Loader size={16} /> : <Menu size={16} />}
+              </Button>
+            </div>
+          </div>
+        </Link>
       </div>
     </div>
   );

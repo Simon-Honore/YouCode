@@ -10,21 +10,24 @@ export const getAdminCourseLessons = async ({
   userId,
   courseId,
 }: GetAdminCourseLessonsProps) => {
-  const courseLessons = await prisma.lesson.findMany({
+  const courseLessons = await prisma.course.findFirst({
     where: {
-      courseId,
-      course: {
-        creatorId: userId,
-      },
+      id: courseId,
+      creatorId: userId,
     },
     select: {
       id: true,
       name: true,
-      state: true,
-      rank: true,
-      course: {
+      lessons: {
+        orderBy: {
+          rank: "asc",
+        },
         select: {
+          id: true,
           name: true,
+          state: true,
+          rank: true,
+          courseId: true,
         },
       },
     },
@@ -36,3 +39,7 @@ export const getAdminCourseLessons = async ({
 export type GetAdminCourseLessons = Prisma.PromiseReturnType<
   typeof getAdminCourseLessons
 >;
+
+export type AdminLessonItemtype = NonNullable<
+  Prisma.PromiseReturnType<typeof getAdminCourseLessons>
+>["lessons"][number];
