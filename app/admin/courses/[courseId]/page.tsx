@@ -6,7 +6,7 @@ import {
   LayoutTitle,
 } from "@/components/layout/Layout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -21,6 +21,15 @@ import { getRequiredAuthSession } from "@/lib/auth";
 import Link from "next/link";
 import { CoursePaginationButton } from "@/features/pagination/PaginationButton";
 import { getAdminCourse } from "./admin-course.query";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Ban, Blocks, Menu } from "lucide-react";
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export default async function CoursePage({
   params,
@@ -58,13 +67,21 @@ export default async function CoursePage({
                 <TableRow>
                   <TableHead>Image</TableHead>
                   <TableHead>Name</TableHead>
+                  <TableHead className="text-end">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {course.users?.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>
-                      <Avatar className="rounded">
+                      <Avatar className="relative overflow-visible rounded">
+                        {user.canceled && (
+                          <Ban
+                            strokeWidth={3}
+                            size={20}
+                            className="absolute -left-1 -top-1 z-10 fill-white stroke-red-700"
+                          />
+                        )}
                         <AvatarFallback>{user.email?.[0]}</AvatarFallback>
                         {user.image && (
                           <AvatarImage
@@ -82,6 +99,62 @@ export default async function CoursePage({
                       >
                         {user.email}
                       </Typography>
+                    </TableCell>
+                    <TableCell className="text-end">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <Button variant="secondary" size="icon">
+                            <Menu />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem asChild>
+                            <form>
+                              <button
+                                formAction={async () => {
+                                  "use server";
+
+                                  const session =
+                                    await getRequiredAuthSession();
+
+                                  const userId = user.id;
+                                  const courseId = params.courseId;
+
+                                  const courseOnUser =
+                                    await prisma.courseOnUser.findFirst({
+                                      where: {
+                                        userId,
+                                        courseId,
+                                        course: {
+                                          creatorId: session.user.id,
+                                        },
+                                      },
+                                    });
+
+                                  if (!courseOnUser) {
+                                    return;
+                                  }
+
+                                  await prisma.courseOnUser.update({
+                                    where: {
+                                      id: courseOnUser.id,
+                                    },
+                                    data: {
+                                      canceledAt: user.canceled
+                                        ? null
+                                        : new Date(),
+                                    },
+                                  });
+
+                                  revalidatePath("/admin/courses/[courseId]");
+                                }}
+                              >
+                                {user.canceled ? "autoriser" : "bloquer"}
+                              </button>
+                            </form>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
