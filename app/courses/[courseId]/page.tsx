@@ -2,15 +2,19 @@ import React from "react";
 import { getCourse } from "./course.query";
 import {
   Layout,
+  LayoutActions,
   LayoutContent,
   LayoutHeader,
 } from "@/components/layout/Layout";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getAuthSession } from "@/lib/auth";
+import { getAuthSession, getRequiredAuthSession } from "@/lib/auth";
 import MarkdownProse from "@/features/mdx/MarkdownProse";
 import { Typography } from "@/components/ui/typography";
 import LessonsInACourse from "@/features/lessons/LessonsInACourse";
+import { Button } from "@/components/ui/button";
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export default async function CourseDetailsPage({
   params,
@@ -35,7 +39,7 @@ export default async function CourseDetailsPage({
           {course.image && <AvatarImage src={course.image} alt={course.name} />}
         </Avatar>
 
-        <div className="flex h-full flex-col justify-around">
+        <div className="flex h-full flex-1 flex-col justify-around">
           <Typography variant="h2">{course.name}</Typography>
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
@@ -52,6 +56,54 @@ export default async function CourseDetailsPage({
             )}
           </div>
         </div>
+        {!course.isCreator && !course.isBanned && !course.isEnrolled && (
+          <LayoutActions>
+            <form>
+              <Button
+                formAction={async () => {
+                  "use server";
+
+                  const session = await getRequiredAuthSession();
+
+                  const courseOnUser = await prisma.courseOnUser.create({
+                    data: {
+                      courseId: course.id,
+                      userId: session.user.id,
+                    },
+                    select: {
+                      course: {
+                        select: {
+                          id: true,
+                          lessons: {
+                            where: {
+                              state: {
+                                in: ["PUBLISHED", "PUBLIC"],
+                              },
+                            },
+                            take: 1,
+                            select: {
+                              id: true,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  });
+
+                  const lesson = courseOnUser.course.lessons[0];
+
+                  revalidatePath(`/courses/${course.id}`);
+
+                  if (lesson) {
+                    redirect(`/courses/${course.id}/lessons/${lesson.id}`);
+                  }
+                }}
+              >
+                rejoindre
+              </Button>
+            </form>
+          </LayoutActions>
+        )}
       </LayoutHeader>
 
       <LayoutContent className="mt-4 flex flex-row-reverse gap-6">

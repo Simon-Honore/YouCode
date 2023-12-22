@@ -16,6 +16,15 @@ export const getCourse = async ({ courseId, userId = "-" }: GetCourseProps) => {
       name: true,
       presentation: true,
       image: true,
+      users: {
+        where: {
+          userId,
+        },
+        select: {
+          userId: true,
+          canceledAt: true,
+        },
+      },
       lessons: {
         where: {
           state: {
@@ -44,6 +53,7 @@ export const getCourse = async ({ courseId, userId = "-" }: GetCourseProps) => {
           name: true,
           image: true,
           email: true,
+          id: true,
         },
       },
       _count: {
@@ -68,6 +78,9 @@ export const getCourse = async ({ courseId, userId = "-" }: GetCourseProps) => {
 
   return {
     ...course,
+    isEnrolled: course.users.length > 0 && !course.users[0].canceledAt,
+    isBanned: course.users.length > 0 && Boolean(course.users[0].canceledAt),
+    isCreator: course.creator.id === userId,
     lessons,
   };
 };

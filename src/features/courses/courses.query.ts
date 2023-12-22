@@ -20,7 +20,7 @@ export const getCourses = async ({
             {
               users: {
                 some: {
-                  id: userId,
+                  userId,
                 },
               },
             },
