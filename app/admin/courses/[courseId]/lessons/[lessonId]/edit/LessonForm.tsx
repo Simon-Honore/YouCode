@@ -31,9 +31,13 @@ export type LessonFormProps = {
   defaultValues: LessonFormSchema & {
     id: string;
   };
+  redirect?: boolean;
 };
 
-export default function LessonForm({ defaultValues }: LessonFormProps) {
+export default function LessonForm({
+  defaultValues,
+  redirect = true,
+}: LessonFormProps) {
   const form = useZodForm({
     schema: LessonFormSchema,
     defaultValues: defaultValues,
@@ -55,7 +59,10 @@ export default function LessonForm({ defaultValues }: LessonFormProps) {
           toast.success(
             `Le cours a été ${defaultValues?.id ? "modifié." : "créé."}`
           );
-          router.push(`/admin/courses/${data.lesson.courseId}/lessons`);
+
+          if (redirect) {
+            router.push(`/admin/courses/${data.lesson.courseId}/lessons`);
+          }
           router.refresh();
           return;
         }

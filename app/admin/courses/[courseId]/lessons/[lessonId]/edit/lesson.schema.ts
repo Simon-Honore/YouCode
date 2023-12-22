@@ -1,5 +1,4 @@
-import { prisma } from "@/lib/prisma";
-import { $Enums, LessonState, Prisma } from "@prisma/client";
+import { LessonState } from "@prisma/client";
 import { z } from "zod";
 
 export const LessonFormSchema = z.object({
